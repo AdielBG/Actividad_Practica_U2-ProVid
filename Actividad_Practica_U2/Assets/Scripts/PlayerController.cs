@@ -77,13 +77,7 @@ public class PlayerController : MonoBehaviour
             capaSuelo             // Qué capas detectar
         );
 
-        // Dibuja el rayo en rojo en la escena
-        // Solo sirve para visualizarlo mientras pruebas el juego
-        Debug.DrawRay(
-            transform.position,
-            Vector2.down * longitudRayo,
-            Color.red
-        );
+
 
         // Si el rayo golpea un collider:
         // devuelve true
