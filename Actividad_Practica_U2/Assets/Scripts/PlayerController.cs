@@ -23,6 +23,11 @@ public class PlayerController : MonoBehaviour
     private bool enSuelo;
 
 
+    //Indica hacia dónde está mirando el personaje.
+    private bool mirandoDerecha = true;
+
+
+
     void Start()
     {
         // Obtiene el componente Rigidbody2D del objeto
@@ -52,6 +57,19 @@ public class PlayerController : MonoBehaviour
         {
             Saltar();
         }
+
+
+        // Voltear el personaje segun direccion
+        if (movimiento > 0 && !mirandoDerecha)
+        {
+            Voltear();  //el jugador se mueve hacia la derecha.
+        }
+        else if (movimiento < 0 && mirandoDerecha)
+        {
+            Voltear();  //el jugador se mueve hacia la izquierda.
+        }
+
+
     }
 
     // Función que hace saltar al jugador
@@ -65,6 +83,16 @@ public class PlayerController : MonoBehaviour
             fuerzaSalto
         );
     }
+
+
+    void Voltear()
+    {
+        mirandoDerecha = !mirandoDerecha;         //Cambia el estado de la dirección
+        Vector3 escala = transform.localScale;   //Invierte la
+        escala.x *= -1;                         // escala en X
+        transform.localScale = escala;         //Aplica la nueva escala al personaje
+    }
+
 
     // Función que detecta si hay suelo debajo del jugador
     bool EstaEnSuelo()
