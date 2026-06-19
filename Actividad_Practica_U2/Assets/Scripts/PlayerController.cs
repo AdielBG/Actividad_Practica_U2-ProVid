@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    
+
     void Update()
     {
         // Lee el movimiento horizontal del teclado
@@ -69,14 +69,15 @@ public class PlayerController : MonoBehaviour
     // Función que detecta si hay suelo debajo del jugador
     bool EstaEnSuelo()
     {
+        Vector2 origen = (Vector2)transform.position + Vector2.down * 0.1f;
+
         // Lanza un rayo hacia abajo desde la posición del jugador
         RaycastHit2D hit = Physics2D.Raycast(
-            transform.position,   // Punto de inicio
+            origen,                // Punto de inicio
             Vector2.down,         // Dirección del rayo
             longitudRayo,         // Distancia del rayo
             capaSuelo             // Qué capas detectar
         );
-
 
 
         // Si el rayo golpea un collider:
@@ -84,7 +85,8 @@ public class PlayerController : MonoBehaviour
         // Si no golpea nada:
         // devuelve false
         return hit.collider != null;
+
     }
 
-    
+
 }
