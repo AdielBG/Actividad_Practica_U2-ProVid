@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     // Se usa para controlar la física y movimiento
     private Rigidbody2D rb;
 
+    // Referencia al Animator del jugador
+    private Animator animator;
+
     // Variable que guarda si el jugador está tocando el suelo
     private bool enSuelo;
 
@@ -27,12 +30,13 @@ public class PlayerController : MonoBehaviour
     private bool mirandoDerecha = true;
 
 
-
     void Start()
     {
         // Obtiene el componente Rigidbody2D del objeto
         // y lo guarda en la variable rb
         rb = GetComponent<Rigidbody2D>();
+
+        animator = GetComponent<Animator>();
     }
 
 
@@ -51,6 +55,22 @@ public class PlayerController : MonoBehaviour
         // Verifica si el jugador está tocando el suelo
         enSuelo = EstaEnSuelo();
 
+
+
+
+
+        // Actualiza los parametros del Animator
+
+        // Velocidad horizontal del personaje
+        animator.SetFloat("Speed", Mathf.Abs(movimiento));
+
+        // ¿Está saltando?
+        animator.SetBool("IsJumping", !enSuelo);
+
+        // Velocidad vertical actual
+        animator.SetFloat("VerticalVelocity", rb.linearVelocity.y);
+
+
         // Si está en el suelo y se presiona espacio
         // entonces el jugador salta
         if (enSuelo && Input.GetButtonDown("Jump"))
@@ -68,7 +88,6 @@ public class PlayerController : MonoBehaviour
         {
             Voltear();  //el jugador se mueve hacia la izquierda.
         }
-
 
     }
 
@@ -94,9 +113,11 @@ public class PlayerController : MonoBehaviour
     }
 
 
+
     // Función que detecta si hay suelo debajo del jugador
     bool EstaEnSuelo()
     {
+
         Vector2 origen = (Vector2)transform.position + Vector2.down * 0.1f;
 
         // Lanza un rayo hacia abajo desde la posición del jugador
@@ -113,8 +134,10 @@ public class PlayerController : MonoBehaviour
         // Si no golpea nada:
         // devuelve false
         return hit.collider != null;
-
     }
+
+
+
 
 
 }
