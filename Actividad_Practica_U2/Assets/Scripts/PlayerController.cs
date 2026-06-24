@@ -1,4 +1,6 @@
 using UnityEngine;
+using TMPro;
+using System.Collections.Generic;
 
 
 public class PlayerController : MonoBehaviour
@@ -30,6 +32,24 @@ public class PlayerController : MonoBehaviour
     private bool mirandoDerecha = true;
 
 
+    // Referencia al texto del contador en pantalla
+    public TextMeshProUGUI textoContador;
+
+    // Diccionario que guarda cuantos objetos
+    // de cada tipo hemos recolectado
+    private Dictionary<string, int> objetosRecolectados = new Dictionary<string, int>()
+    {
+        { "Cake", 0 },
+        { "Chicken", 0 },
+        { "Coffee", 0 },
+        { "Jam", 0 },
+        { "Cookie", 0 }
+    }; // Un diccionario almacena datos en pares: (Clave ? Valor)
+       // Nos permite acceder rápidamente a cada contador usando el nombre del objeto.
+
+
+
+
     void Start()
     {
         // Obtiene el componente Rigidbody2D del objeto
@@ -37,6 +57,10 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         animator = GetComponent<Animator>();
+
+
+        // Mostramos el contador inicial en pantalla
+        ActualizarContador();
     }
 
 
@@ -110,6 +134,44 @@ public class PlayerController : MonoBehaviour
         Vector3 escala = transform.localScale;   //Invierte la
         escala.x *= -1;                         // escala en X
         transform.localScale = escala;         //Aplica la nueva escala al personaje
+    }
+
+
+
+    // Se ejecuta automaticamente cuando el jugador
+    // toca un objeto que tiene Is Trigger activado
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        // Verificamos si el objeto tocado tiene el tag Collectible
+        if (collision.CompareTag("Collectible"))
+        {
+            // Obtenemos el nombre del objeto tocado
+            string nombreObjeto = collision.gameObject.name;
+
+            // Verificamos que ese nombre existe en el diccionario
+            if (objetosRecolectados.ContainsKey(nombreObjeto))
+            {
+                // Aumentamos en 1 el contador de ese objeto
+                objetosRecolectados[nombreObjeto]++;
+
+                // Actualizamos el texto en pantalla
+                ActualizarContador();
+            }
+
+            // Eliminamos el objeto de la escena
+            Destroy(collision.gameObject);
+        }
+    }
+
+    // Actualiza el texto del contador en pantalla
+    void ActualizarContador()
+    {
+        textoContador.text =
+            $"Cake: {objetosRecolectados["Cake"]} | " +
+            $"Chicken: {objetosRecolectados["Chicken"]} | " +
+            $"Coffee: {objetosRecolectados["Coffee"]} | " +
+            $"Jam: {objetosRecolectados["Jam"]} | " +
+            $"Cookie: {objetosRecolectados["Cookie"]}";
     }
 
 
