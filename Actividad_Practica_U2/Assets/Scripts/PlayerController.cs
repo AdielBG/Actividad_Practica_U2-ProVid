@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 
 public class PlayerController : MonoBehaviour
@@ -199,6 +200,22 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    // Este método es llamado automáticamente por Unity
+    // cuando este objeto colisiona físicamente con otro objeto 2D
+    // que tenga un Collider2D y un Rigidbody2D.
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Comprueba si el objeto con el que chocó
+        // tiene la etiqueta (Tag) "Enemy".
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            // Reinicia la escena actual.
+            // Primero obtiene la escena activa.
+            // Luego obtiene su índice (buildIndex).
+            // Finalmente vuelve a cargar esa misma escena.
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+    }
 
 
 
